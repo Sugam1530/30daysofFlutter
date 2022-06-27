@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final double days = 30;
-    final String name = "Sugam Looser";
+    final String name = "Sugam";
     bool isMale = true;
     num temp = 30.5;
 
