@@ -4,6 +4,7 @@ import 'package:flutter_first_app/pages/login_page.dart';
 import 'package:flutter_first_app/utils/routes.dart';
 import 'package:flutter_first_app/widgets/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 void main(List<String> args) {
   runApp(const MyApp());
