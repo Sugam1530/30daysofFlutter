@@ -1,10 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
+import 'package:velocity_x/velocity_x.dart';
+
 import 'package:flutter_first_app/models/catalog.dart';
 import 'package:flutter_first_app/widgets/drawer.dart';
-import 'package:velocity_x/velocity_x.dart';
+import 'package:flutter_first_app/widgets/themes.dart';
+
 import '../widgets/item_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -44,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body:SafeArea(
         child: Container(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
               Text("Trending Items",style: TextStyle(
@@ -52,7 +57,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
                if (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
-
                 Expanded(child: CatalogList(),)
                else
                 Center(child: CircularProgressIndicator(),
@@ -60,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      ),  
+      ).backgroundColor(MyTheme.creamColor),  
       drawer: MyDrawer(),
     );
   }
@@ -91,9 +95,42 @@ class CatalogItem extends StatelessWidget {
     return VxBox(
       child: Row(
         children: [
-          Image.network(catalog.image),
+          CatalogImage(image: catalog.image),
+          Expanded(child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              catalog.name.text.xl.color(MyTheme.darkBluishColor).bold.make().pOnly(top: 16),
+              catalog.desc.text.textStyle(context.captionStyle).make().py8(),
+              ButtonBar(
+                alignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  "\$${catalog.price}".text.bold.xl.make(),
+                  ElevatedButton(onPressed: () {}, 
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(MyTheme.darkBluishColor),
+                    shape: MaterialStateProperty.all(StadiumBorder())
+                  ),
+                  child: "Buy".text.make())
+                ],
+              )
+            ],
+          ))
         ],
       ),
-    ).white.rounded.square(100).make().py16();
+    ).white.rounded.square(150).make().py16();
+  }
+}
+
+class CatalogImage extends StatelessWidget {
+  final String image;
+  const CatalogImage({
+    Key? key,
+    required this.image,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return  Image.network(image).box.rounded.p8.color(MyTheme.creamColor).make().p16().w40(context);
   }
 }
