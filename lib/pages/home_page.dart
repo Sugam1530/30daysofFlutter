@@ -10,6 +10,7 @@ import 'package:flutter_first_app/models/catalog.dart';
 import 'package:flutter_first_app/widgets/drawer.dart';
 import 'package:flutter_first_app/widgets/themes.dart';
 
+import '../widgets/home_widgets/catalog_list.dart';
 import '../widgets/item_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,13 +24,13 @@ class _HomePageState extends State<HomePage> {
 
 
     loadData() async {
-     await Future.delayed(Duration(seconds: 2)); 
+     await Future.delayed(const Duration(seconds: 2)); 
      final catalogJson = await rootBundle.loadString("assets/files/catalog.json");
      final decodedData = jsonDecode(catalogJson);
      var productsData = decodedData["products"];
      CatalogModel.items = List.from(productsData)
-                          .map<Item>((item) => Item.fromMap(item))
-                          .toList();
+        .map<Item>((item) => Item.fromMap(item))
+        .toList();
       setState(() {});                    
     }
 
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Catalog App",
+        title: const Text("Catalog App",
         style: TextStyle(color: Colors.black),
         textAlign: TextAlign.center,
         ),
@@ -52,85 +53,19 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              Text("Trending Items",style: TextStyle(
-                fontSize: 20
+              const Text("Trending Items",style: TextStyle(
+                fontSize: 25
                 ),
               ),
                if (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
-                Expanded(child: CatalogList(),)
+                Expanded(child: CatalogList().py8(),)
                else
-                Center(child: CircularProgressIndicator(),
-              ),
+                const CircularProgressIndicator().centered().expand(),
             ],
           ),
         ),
       ).backgroundColor(MyTheme.creamColor),  
       drawer: MyDrawer(),
     );
-  }
-}
-
-class CatalogList extends StatelessWidget {
-  const CatalogList({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: CatalogModel.items.length,
-      itemBuilder: (context, index){
-        final catalog = CatalogModel.items[index];
-        return CatalogItem(catalog:catalog);
-      },
-    );
-  }
-}
-
-class CatalogItem extends StatelessWidget {
-  final Item catalog;
-  const CatalogItem({super.key, required this.catalog}) : assert(catalog != null);
-
-  @override
-  Widget build(BuildContext context) {
-    return VxBox(
-      child: Row(
-        children: [
-          CatalogImage(image: catalog.image),
-          Expanded(child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              catalog.name.text.xl.color(MyTheme.darkBluishColor).bold.make().pOnly(top: 16),
-              catalog.desc.text.textStyle(context.captionStyle).make().py8(),
-              ButtonBar(
-                alignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  "\$${catalog.price}".text.bold.xl.make(),
-                  ElevatedButton(onPressed: () {}, 
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(MyTheme.darkBluishColor),
-                    shape: MaterialStateProperty.all(StadiumBorder())
-                  ),
-                  child: "Buy".text.make())
-                ],
-              )
-            ],
-          ))
-        ],
-      ),
-    ).white.rounded.square(150).make().py16();
-  }
-}
-
-class CatalogImage extends StatelessWidget {
-  final String image;
-  const CatalogImage({
-    Key? key,
-    required this.image,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return  Image.network(image).box.rounded.p8.color(MyTheme.creamColor).make().p16().w40(context);
   }
 }
