@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_first_app/utils/routes.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import 'package:flutter_first_app/models/catalog.dart';
@@ -42,6 +43,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.canvasColor,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, MyRoutes.cartRoute),
+      child: Icon(CupertinoIcons.cart, color: Colors.white,),
+      backgroundColor: context.theme.buttonColor,
+      ),
       appBar: AppBar(
         title: const Text("Catalog App",
         style: TextStyle(color: Colors.black),
@@ -53,10 +60,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              const Text("Trending Items",style: TextStyle(
-                fontSize: 25
-                ),
-              ),
+              "Trending Products".text.xl2.make(),
                if (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
                 Expanded(child: CatalogList().py8(),)
                else
@@ -64,7 +68,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      ).backgroundColor(MyTheme.creamColor),  
+      ),  
       drawer: MyDrawer(),
     );
   }
