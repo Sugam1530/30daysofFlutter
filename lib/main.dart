@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_first_app/core/store.dart';
 import 'package:flutter_first_app/pages/cart_page.dart';
 import 'package:flutter_first_app/pages/home_page.dart';
 import 'package:flutter_first_app/pages/login_page.dart';
@@ -8,7 +9,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 void main(List<String> args) {
-  runApp(const MyApp());
+  runApp(VxState(
+    store: MyStore(),
+    child: const MyApp()
+  ));
 }
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
