@@ -1,28 +1,75 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 
-class HomePage extends StatelessWidget {
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_first_app/utils/routes.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+import 'package:flutter_first_app/models/catalog.dart';
+import 'package:flutter_first_app/widgets/drawer.dart';
+import 'package:flutter_first_app/widgets/themes.dart';
+
+import '../widgets/home_widgets/catalog_list.dart';
+import '../widgets/item_widget.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+
+    loadData() async {
+     await Future.delayed(const Duration(seconds: 2)); 
+     final catalogJson = await rootBundle.loadString("assets/files/catalog.json");
+     final decodedData = jsonDecode(catalogJson);
+     var productsData = decodedData["products"];
+     CatalogModel.items = List.from(productsData)
+        .map<Item>((item) => Item.fromMap(item))
+        .toList();
+      setState(() {});                    
+    }
+
+    void initState() {
+      super.initState();
+      loadData();
+    }
+
+  @override
   Widget build(BuildContext context) {
-
-    final double days = 30;
-    final String name = "Sugam";
-    bool isMale = true;
-    num temp = 30.5;
-
-    var day = "Tuesday";
-    const pi = 3.14;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Catalog App"),
+      backgroundColor: context.canvasColor,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, MyRoutes.cartRoute),
+      child: Icon(CupertinoIcons.cart, color: Colors.white,),
+      backgroundColor: context.theme.buttonColor,
       ),
-      body: Center(
-        child: Container(
-          child: Text("Welcome to $days days of Flutter by $name"),
+      appBar: AppBar(
+        title: const Text("Catalog App",
+        style: TextStyle(color: Colors.black),
+        textAlign: TextAlign.center,
         ),
       ),
-      drawer: Drawer(),
+      body:SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              "Trending Products".text.xl2.make(),
+               if (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
+                Expanded(child: CatalogList().py8(),)
+               else
+                const CircularProgressIndicator().centered().expand(),
+            ],
+          ),
+        ),
+      ),  
+      drawer: MyDrawer(),
     );
   }
 }
