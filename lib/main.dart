@@ -3,6 +3,7 @@ import 'package:flutter_first_app/core/store.dart';
 import 'package:flutter_first_app/pages/cart_page.dart';
 import 'package:flutter_first_app/pages/home_page.dart';
 import 'package:flutter_first_app/pages/login_page.dart';
+import 'package:flutter_first_app/pages/splash.dart';
 import 'package:flutter_first_app/utils/routes.dart';
 import 'package:flutter_first_app/widgets/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,12 +25,13 @@ class MyApp extends StatelessWidget {
       theme: MyTheme.lightTheme(context),
       darkTheme: MyTheme.darkTheme(context),
       debugShowCheckedModeBanner: false,
-      initialRoute: MyRoutes.homeRoute,
+      initialRoute: MyRoutes.Splash,
       routes: {
         "/" : (context) => const LoginPage(),
         MyRoutes.loginRoute : (context) => const LoginPage(),
         MyRoutes.homeRoute :(context) => const HomePage(),
         MyRoutes.cartRoute :(context) => const CartPage(),
+        MyRoutes.Splash : ((context) => const Splash()),
       },
     );
   }
